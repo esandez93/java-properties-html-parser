@@ -76,6 +76,7 @@ const parseHtmlToJava = (content) => {
       .replace(/#/g, '\\#')
       .replace(/=/g, '\\=')
       .replace(/'/g, '\'\'')
+      .replace(/>\s</g, '><')
       .replace(/\n+/g, '')
   );
 
