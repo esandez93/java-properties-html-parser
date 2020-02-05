@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 import {
-  Textarea
+  Textarea,
+  Footer
 } from './components';
 import {
   escapeAccents,
@@ -53,6 +54,8 @@ const App = () => {
           />
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
