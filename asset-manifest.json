@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/java-properties-html-parser/static/css/main.51166b03.chunk.css",
+    "main.js": "/java-properties-html-parser/static/js/main.e57dec93.chunk.js",
+    "main.js.map": "/java-properties-html-parser/static/js/main.e57dec93.chunk.js.map",
+    "runtime-main.js": "/java-properties-html-parser/static/js/runtime-main.2f9e44e3.js",
+    "runtime-main.js.map": "/java-properties-html-parser/static/js/runtime-main.2f9e44e3.js.map",
+    "static/js/2.42ecd305.chunk.js": "/java-properties-html-parser/static/js/2.42ecd305.chunk.js",
+    "static/js/2.42ecd305.chunk.js.map": "/java-properties-html-parser/static/js/2.42ecd305.chunk.js.map",
+    "index.html": "/java-properties-html-parser/index.html",
+    "precache-manifest.6f17c43956a6bf65adf43e0be83db4ad.js": "/java-properties-html-parser/precache-manifest.6f17c43956a6bf65adf43e0be83db4ad.js",
+    "service-worker.js": "/java-properties-html-parser/service-worker.js",
+    "static/css/main.51166b03.chunk.css.map": "/java-properties-html-parser/static/css/main.51166b03.chunk.css.map",
+    "static/js/2.42ecd305.chunk.js.LICENSE.txt": "/java-properties-html-parser/static/js/2.42ecd305.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2f9e44e3.js",
+    "static/js/2.42ecd305.chunk.js",
+    "static/css/main.51166b03.chunk.css",
+    "static/js/main.e57dec93.chunk.js"
+  ]
+}
