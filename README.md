@@ -10,6 +10,13 @@
   - One line in Java box
 - Java encoding of accents
 
+## To be done
+- Highlight code
+- Validate HTML before parsing
+- Give options:
+  - Multiline string in Java
+  - Spaces between nodes
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
