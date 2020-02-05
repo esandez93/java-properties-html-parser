@@ -1,0 +1,7 @@
+.Textarea {
+  border: 1px solid black;
+  min-height: 128px;
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
