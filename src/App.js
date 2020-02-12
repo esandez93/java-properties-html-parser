@@ -2,60 +2,93 @@ import React, { useState } from 'react';
 import './App.css';
 
 import {
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+import {
+  Button,
   Textarea,
+  Header,
   Footer
 } from './components';
 import {
   escapeAccents,
   parseHtmlToJava,
-  parseJavaToHtml
+  parseJavaToHtml,
+  validateHtmlStr
 } from './utils';
 
 const App = () => {
   const [ html, setHtml ] = useState('');
   const [ java, setJava ] = useState('');
 
-  const applyChanges = (type) => {
-    return (content) => {
-      if (type === 'html') {
+  // TODO: Manage Invalid HTML
+  const applyChanges = (type) => (content) => {
+    if (type === 'html') {
+      validateHtmlStr(content).then(() => {
         setHtml(content);
         setJava(parseHtmlToJava(content));
-      } else if (type === 'java') {
-        setJava(escapeAccents(content));
-        setHtml(parseJavaToHtml(content));
-      }
+      }).catch(() => {
+        // show invalid HTML error
+        console.log('Invalid HTML');
+      });
+    } else if (type === 'java') {
+      setJava(escapeAccents(content));
+
+      const parsedHtml = parseJavaToHtml(content);
+
+      validateHtmlStr(parsedHtml).then(() => {
+        setHtml(parsedHtml);
+      }).catch(() => {
+        // show invalid HTML error
+        console.log('Invalid HTML');
+      });
     }
   };
 
   return (
     <div className="App">
-      <div className="Header">
-        Java Properties - HTML parser
-      </div>
+      <Header />
 
-      <div className="Content">
-        <div className="Block">
-          <div>HTML</div>
-          <Textarea
-            value={html}
-            onChange={applyChanges('html')}
-            placeholder="Write your HTML here to parse it"
-            debounce={500}
-          />
-        </div>
+      <Switch>
+        <Route exact path="/">
+          <div className="Content">
+            <div className="Block">
+              <div>HTML</div>
+              <Textarea
+                value={html}
+                onChange={applyChanges('html')}
+                placeholder="Write your HTML here to parse it"
+                debounce={500}
+              />
+            </div>
 
-        <div className="Block">
-          <div>Java Properties</div>
-          <Textarea
-            value={java}
-            onChange={applyChanges('java')}
-            placeholder="Write your Java string here to parse it"
-            debounce={500}
-          />
-        </div>
-      </div>
+            <div className="Block">
+              <div>Java Properties</div>
+              <Textarea
+                value={java}
+                onChange={applyChanges('java')}
+                placeholder="Write your Java string here to parse it"
+                debounce={500}
+              />
+            </div>
 
-      <Footer />
+            <Link to="/preview">
+              <Button disabled={html === ''}>
+                HTML Preview
+              </Button>
+            </Link>
+          </div>
+
+          <Footer />
+        </Route>
+
+        <Route exact path="/preview">
+          <div dangerouslySetInnerHTML={{ __html: html === '' ? '<i>No HTML to preview</i>' : html }}></div>
+        </Route>
+      </Switch>
     </div>
   );
 }

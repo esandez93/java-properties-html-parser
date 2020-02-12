@@ -1,0 +1,14 @@
+.Button {
+  background-color: #259EAC;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+}
+
+.Button:disabled {
+  background-color: darkgrey;
+  color: grey;
+  cursor: not-allowed;
+}

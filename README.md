@@ -11,8 +11,11 @@
 - Java encoding of accents
 
 ## To be done
+
 - Highlight code
 - Validate HTML before parsing
+- Preview HTML
+- Escape apostrophe in string doubling it and outside with \u2019
 - Give options:
   - Multiline string in Java
   - Spaces between nodes

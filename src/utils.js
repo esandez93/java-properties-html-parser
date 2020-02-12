@@ -26,6 +26,8 @@ const escapeAccents = (content) => (
     .replace(/ú/g, '\\u00FA')
     .replace(/û/g, '\\u00FB')
     .replace(/ü/g, '\\u00FC')
+
+    .replace(/ç/g, '\\u00E7')
 );
 
 const unescapeAccents = (content) => (
@@ -58,6 +60,7 @@ const unescapeAccents = (content) => (
     .replace(/\\u00FC/g, 'ü')
 
     .replace(/\\u2019/g, '\'')
+    .replace(/\\u00E7/g, 'ç')
 );
 
 
@@ -133,9 +136,75 @@ function formatHtml(node, level = 0) {
   return node;
 }
 
+function validateHtmlStr (htmlStr, strictBoolean = true) {
+  return new Promise((resolve, reject) => {
+    resolve();
+
+    // TODO: Check if the validations are correct
+    if (typeof htmlStr !== "string")
+      reject();
+
+    const validateHtmlTag = /<[a-z]+(\s+|"[^"]*"\s?|'[^']*'\s?|[^'">])*>/igm;
+    let sdom = document.createElement('div');
+    let noSrcNoAmpHtmlStr = htmlStr
+        .replace(/ src=/, " svhs___src=") // disarm src attributes
+        .replace(/&amp;/igm, "#svhs#amp##"); // 'save' encoded ampersands
+    let noSrcNoAmpIgnoreScriptContentHtmlStr = noSrcNoAmpHtmlStr
+        .replace(/\n\r?/igm, "#svhs#nl##") // temporarily remove line breaks
+        .replace(/(<script[^>]*>)(.*?)(<\/script>)/igm, "$1$3") // ignore script contents
+        .replace(/#svhs#nl##/igm, "\n\r");  // re-add line breaks
+    const htmlTags = noSrcNoAmpIgnoreScriptContentHtmlStr.match(/<[a-z]+[^>]*>/igm); // get all start-tags
+    const htmlTagsCount = htmlTags ? htmlTags.length : 0;
+    let tagsAreValid = null;
+    let resHtmlStr = null;
+
+
+    if (!strictBoolean) {
+      // ignore <br/> conversions
+      noSrcNoAmpHtmlStr = noSrcNoAmpHtmlStr.replace(/<br\s*\/>/, "<br>");
+    }
+
+    if (htmlTagsCount) {
+      tagsAreValid = htmlTags.reduce((isValid, tagStr) => isValid && tagStr.match(validateHtmlTag), true);
+
+      if (!tagsAreValid) {
+        reject();
+      }
+    }
+
+    try {
+      sdom.innerHTML = noSrcNoAmpHtmlStr;
+    } catch (err) {
+      reject(err);
+    }
+
+    // compare rendered tag-count with expected tag-count
+    if (sdom.querySelectorAll("*").length !== htmlTagsCount) {
+      reject();
+    }
+
+    resHtmlStr = sdom.innerHTML.replace(/&amp;/igm, "&"); // undo '&' encoding
+
+    if (!strictBoolean) {
+      // ignore empty attribute normalizations
+      resHtmlStr = resHtmlStr.replace(/=""/, "")
+    }
+
+    // compare html strings while ignoring case, quote-changes, trailing spaces
+    const simpleIn = noSrcNoAmpHtmlStr.replace(/["']/igm, "").replace(/\s+/igm, " ").toLowerCase().trim();
+    const simpleOut = resHtmlStr.replace(/["']/igm, "").replace(/\s+/igm, " ").toLowerCase().trim();
+
+    if (simpleIn === simpleOut)
+      resolve();
+
+    resolve(resHtmlStr.replace(/ svhs___src=/igm, " src=").replace(/#svhs#amp##/, "&amp;"));
+  });
+}
+
 export {
   escapeAccents,
   unescapeAccents,
   parseHtmlToJava,
-  parseJavaToHtml
+  parseJavaToHtml,
+  validateHtmlStr
 };
