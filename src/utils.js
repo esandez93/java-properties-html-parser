@@ -63,6 +63,28 @@ const unescapeAccents = (content) => (
     .replace(/\\u00E7/g, 'ç')
 );
 
+const escapeQuotes = (content) => {
+  let temp = '';
+  let isQuoted = false;
+  let last = '';
+
+  for (let i = 0; i < content.length; i++) {
+    if (content[i] === '"' && last !== '\\') {
+      isQuoted = !isQuoted;
+    }
+
+    if (content[i] === '\'') {
+      temp += isQuoted ? "''" : '\\u2019';
+    } else {
+      temp += content[i];
+    }
+
+    last = content[i];
+  }
+
+  return temp;
+};
+
 
 const parseHtmlToJava = (content) => {
   console.group('Parsing HTML');
@@ -71,17 +93,17 @@ const parseHtmlToJava = (content) => {
   console.log('-------------------------------');
   console.log('Result');
 
-  let result = escapeAccents(
+  let result = escapeQuotes(escapeAccents(
     content
       .trim()
       .replace(/\s{2}/g, '')
       .replace(/:/g, '\\:')
       .replace(/#/g, '\\#')
       .replace(/=/g, '\\=')
-      .replace(/'/g, '\'\'')
+      //.replace(/'/g, '\'\'')
       .replace(/>\s</g, '><')
       .replace(/\n+/g, '')
-  );
+  ));
 
   console.log(result);
   console.groupEnd('Parsing HTML');
