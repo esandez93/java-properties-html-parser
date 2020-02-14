@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import packageJson from '../package.json';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from "react-router-dom";
@@ -8,7 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 const root = document.getElementById('root');
 
 const render = (Component) => ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename={packageJson.name}>
     <Component />
   </BrowserRouter>,
   root
